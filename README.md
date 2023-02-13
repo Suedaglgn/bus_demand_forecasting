@@ -2,7 +2,7 @@
 
 ## Problem Definition
 
-The central urban planning commitee of Banana Republic asked you to help them with the forecast of bus demands of municipalities. And they provide a nice dataset to support you (https://pi.works/3w8IJbV). 
+The central urban planning commitee of Banana Republic asked you to help them with the forecast of bus demands of municipalities. And they provide a nice dataset to support you. 
 The dataset includes two measurements for an hour for the number of used buses in each municipality, each measurement is timestamped. The dataset format is as follows (comma separated values):
 
 - MUNICIPALITY_ID: where municipality_id is an anonymization to disguise the actual names,There are 10 municipalities (ids from 0 to 9)
@@ -18,3 +18,70 @@ The committee says that they will use the last two weeks (starting from 2017-08-
 Keep in mind that the dataset has missing data, hence a suitable missing data interpolation would be useful.
 
 
+## Methods
+
+- Simple Moving Average
+- Prophet
+- LSTM Encoder-Decoder
+
+## Results
+
+|                |        |  Models   |        |
+|:--------------:|:------:|:---------:|:------:|
+| Municipalities |  SMA   |  Prophet  |  LSTM  |
+|       0        |  0,24  |   0,23    |  0,45  |
+|       1        |  0,28  |   0,56    |  0,28  |
+|       2        |  0,23  |   0,57    |  0,23  |
+|       3        |  0,30  |   0,20    |  0,26  |
+|       4        |  0,33  |   0,22    |  0,22  |
+|       5        |  2,47  |   8,05    |  0,55  |
+|       6        |  0,17  |   0,19    |  0,20  |
+|       7        |  0,21  |   0,11    |  0,15  |
+|       8        |  0,23  |   0,19    |  0,25  |
+|       9        |  0,24  |   0,26    |  1.0   |
+
+
+## Usage
+
+- Run preprocess.ipynb to create preprocced_data.csv
+- Run desired model's notebook
+
+## Hyperparameters
+
+**General Parameters**
+```
+forecast_start = "2017-08-05 06"
+forecast_end = "2017-08-19 16"
+working_hours_start = 7
+working_hours_end = 16
+```
+
+
+- **Simple Moving Average**
+  - window: 11
+- **Prophet**
+  - yearly_seasonality=False,
+  - weekly_seasonality=True,
+  - daily_seasonality='auto',
+  - interval_width=0.95
+- **LSTM**
+  - EarlyStopping
+    - monitor="val_loss",
+    - min_delta=0.005,
+    - patience=10,
+    - mode="min"
+  - ReduceLROnPlateau
+    - monitor="val_loss"
+    - factor=0.2
+    - mode="min"
+    - patience=3
+    - min_lr=0.01
+  - LOOK_BACK = 7 
+  - FORECAST_RANGE = 1
+  - epochs = 100 
+  - batch_size = 32 
+  - validation = 0.1
+  - optimizer='rmsprop'
+  - loss='mae'
+  - run_eagerly=True
+  - activation='relu'
