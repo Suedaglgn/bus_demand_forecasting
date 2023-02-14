@@ -26,8 +26,8 @@ Keep in mind that the dataset has missing data, hence a suitable missing data in
 
 ## Results
 
-|                |        |  Models   |    |
-|:--------------:|:------:|:---------:|:--:|
+|                |        |  Models   |      |
+|:--------------:|:------:|:---------:|:----:|
 | Municipalities |  SMA   |  Prophet  | LSTM |
 |       0        |  0,24  |   0,23    | 0,22 |
 |       1        |  0,28  |   0,56    | 0,24 |
@@ -85,3 +85,9 @@ working_hours_end = 16
   - loss='mae'
   - run_eagerly=True
   - activation='relu'
+
+## Visualisation
+
+GitHub doesn't support a lot of features of notebooks, such as interactive Plotly plots, and has faulty rendering in a number of ways.
+To see the outputs of Plotly, you can visit https://nbviewer.org/, and paste the notebook link. 
+
